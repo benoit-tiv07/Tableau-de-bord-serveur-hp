@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block titre %}Accueil{% endblock %}
+{% block contenu %}
+  <header class="horloge">
+    <p id="heure" class="heure">--:--:--</p>
+    <p id="date" class="date"></p>
+  </header>
+
+  <div class="grille">
+    <section class="carte">
+      <h2>Météo</h2>
+      <div id="meteo" class="muted">Chargement…</div>
+    </section>
+    <section class="carte">
+      <h2>Serveur</h2>
+      <div id="systeme" class="muted">Chargement…</div>
+    </section>
+    <section class="carte">
+      <h2>Machines</h2>
+      <div id="machines" class="muted">Chargement…</div>
+    </section>
+
+    <div class="duo large">
+      <section class="carte">
+        <h2>Agenda</h2>
+        <ul id="agenda" class="agenda"><li class="muted">Chargement…</li></ul>
+      </section>
+      <section class="carte">
+        <h2>Actus</h2>
+        <div id="veille" class="muted">Chargement…</div>
+      </section>
+    </div>
+
+    <section class="carte large">
+      <div class="entete"><h2>Devoirs</h2><span id="devoirsCompte" class="muted"></span></div>
+      <form id="formDevoir" class="form-devoir">
+        <input name="titre" type="text" placeholder="Nouveau devoir…" required maxlength="200" autocomplete="off">
+        <input name="matiere" type="text" placeholder="Matière" maxlength="50" autocomplete="off">
+        <input name="echeance" type="date">
+        <button type="submit">Ajouter</button>
+      </form>
+      <ul id="devoirs" class="devoirs"></ul>
+    </section>
+
+    {% if calendriers %}
+    <section class="carte large">
+      <h2>Calendrier</h2>
+      <div class="calendriers">
+        {% for nom, url in calendriers %}
+          <iframe src="{{ url }}" title="{{ nom }}" loading="lazy"></iframe>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="carte large">
+      <h2>Raccourcis</h2>
+      <div class="raccourcis">
+        {% for nom, url in raccourcis %}
+          <a href="{{ url }}" target="_blank" rel="noopener">{{ nom }}</a>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+{% endblock %}
+{% block scripts %}
+  <script src="{{ url_for('static', filename='accueil.js') }}"></script>
+{% endblock %}

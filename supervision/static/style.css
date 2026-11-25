@@ -1,0 +1,90 @@
+body { font-family: system-ui, sans-serif; background: #12151c; color: #e6e9ef;
+       margin: 0; }
+main { max-width: 900px; margin: 1.5rem auto; padding: 0 1rem; }
+h1 { font-size: 1.4rem; }
+h2 { font-size: 1.1rem; }
+
+.menu { display: flex; gap: 1rem; padding: .8rem 1rem; background: #1c212b; }
+.menu a { color: #8b93a5; text-decoration: none; padding: .2rem .7rem;
+          border-radius: 8px; }
+.menu a:hover { color: #e6e9ef; }
+.menu a.actif { background: #12151c; color: #e6e9ef; }
+
+.carte { background: #1c212b; border-radius: 12px; padding: 1rem 1.2rem;
+         margin-bottom: 1rem; }
+.carte h2 { margin: 0 0 .6rem; }
+.ligne { display: flex; justify-content: space-between; align-items: center;
+         padding: .3rem 0; }
+.ip { color: #8b93a5; font-size: .85rem; }
+.badge { padding: .15rem .7rem; border-radius: 999px; font-size: .85rem;
+         font-weight: 600; }
+.ok { background: #1f5d3a; color: #7dffb0; }
+.ko { background: #5d1f26; color: #ff8a95; }
+#maj { color: #8b93a5; font-size: .85rem; }
+
+/* Tableau de bord */
+.horloge { text-align: center; margin-bottom: 1.2rem; }
+.heure { font-size: 3rem; font-weight: 700; margin: 0; }
+.date { color: #8b93a5; margin: 0; text-transform: capitalize; }
+.grille { display: grid; gap: 1rem;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grille .carte { margin-bottom: 0; }
+.grand { font-size: 2rem; font-weight: 700; }
+.muted { color: #8b93a5; font-size: .9rem; }
+.barre { height: 8px; background: #12151c; border-radius: 999px; overflow: hidden; }
+.barre span { display: block; height: 100%; background: #4c8dff; }
+
+/* Devoirs et raccourcis */
+.large { grid-column: 1 / -1; }
+.entete { display: flex; justify-content: space-between; align-items: baseline; }
+input, button { font: inherit; color: #e6e9ef; background: #12151c; color-scheme: dark;
+                border: 1px solid #2a3140; border-radius: 8px; padding: .4rem .7rem; }
+button { cursor: pointer; }
+button:hover { border-color: #4c8dff; }
+.form-devoir { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .8rem; }
+.form-devoir input[name=titre] { flex: 1 1 220px; }
+.devoirs { list-style: none; margin: 0; padding: 0; }
+.devoir { display: flex; align-items: center; gap: .6rem; padding: .35rem 0;
+          border-top: 1px solid #2a3140; }
+.devoir-titre { flex: 1; }
+.devoir.fait .devoir-titre { text-decoration: line-through; color: #8b93a5; }
+.tag { background: #2a3140; border-radius: 999px; padding: .05rem .6rem; font-size: .8rem; }
+.retard { color: #ff8a95; }
+.suppr { padding: .1rem .5rem; }
+.raccourcis { display: flex; flex-wrap: wrap; gap: .6rem; }
+.raccourcis a { background: #12151c; border: 1px solid #2a3140; border-radius: 8px;
+                padding: .4rem .9rem; color: #e6e9ef; text-decoration: none; }
+.raccourcis a:hover { border-color: #4c8dff; }
+
+/* Agenda et calendriers */
+.agenda { list-style: none; margin: 0; padding: 0; }
+.agenda li { display: flex; flex-wrap: wrap; gap: .2rem .8rem; padding: .35rem 0;
+             border-top: 1px solid #2a3140; }
+.agenda li:first-child { border-top: 0; }
+.quand { flex: 0 0 15rem; color: #8b93a5; }
+.calendriers { display: grid; gap: 1rem;
+               grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.calendriers iframe { width: 100%; height: 600px; border: 0; border-radius: 8px;
+                      background: #fff; }
+
+/* RSS */
+main a { color: #7db3ff; text-decoration: none; }
+main a:hover { text-decoration: underline; }
+.barre-outils { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem;
+                margin-bottom: .8rem; }
+.barre-outils label { color: #8b93a5; font-size: .9rem; }
+select { font: inherit; color: #e6e9ef; background: #12151c; color-scheme: dark;
+         border: 1px solid #2a3140; border-radius: 8px; padding: .4rem .7rem; }
+.articles { list-style: none; margin: 0; padding: 0; }
+.article { padding: .6rem 0; border-top: 1px solid #2a3140; }
+.article:first-child { border-top: 0; }
+.article > a { font-weight: 600; }
+.article.lu > a { color: #8b93a5; font-weight: 400; }
+.resume { margin: .3rem 0 0; color: #b4bac7; font-size: .9rem; }
+.article.lu .resume { display: none; }
+.veille-ligne { padding: .3rem 0; border-top: 1px solid #2a3140; font-size: .95rem; }
+.veille-ligne:first-child { border-top: 0; }
+/* Agenda + Actus côte à côte */
+.duo { display: grid; gap: 1rem; grid-template-columns: 2fr 1fr; }
+.duo .carte { margin-bottom: 0; }
+@media (max-width: 800px) { .duo { grid-template-columns: 1fr; } }

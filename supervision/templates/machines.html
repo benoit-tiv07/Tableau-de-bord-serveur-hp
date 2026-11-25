@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block titre %}Machines{% endblock %}
+{% block contenu %}
+  <h1>Supervision réseau</h1>
+  <p id="maj">Chargement…</p>
+  <div id="liste"></div>
+  <h2>Historique</h2>
+  <div id="histo" class="ip"></div>
+{% endblock %}
+{% block scripts %}
+  <script src="{{ url_for('static', filename='machines.js') }}"></script>
+{% endblock %}

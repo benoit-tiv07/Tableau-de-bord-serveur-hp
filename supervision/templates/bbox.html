@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block titre %}Bbox{% endblock %}
+{% block contenu %}
+<style>
+  .bbox-gros{font-size:2rem;font-weight:600;margin:.2rem 0}
+  .bbox-liens a{display:inline-block;margin:.2rem .4rem .2rem 0}
+  .bbox-table{width:100%;border-collapse:collapse;font-size:.9rem}
+  .bbox-table th,.bbox-table td{text-align:left;padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25)}
+  .bbox-scroll{overflow-x:auto}
+  #bboxPeriode{margin-left:.5rem}
+</style>
+
+<div class="grille">
+  <section class="carte">
+    <h2>Descendant</h2>
+    <div class="bbox-gros" id="rx">–</div>
+    <div class="muted" id="rxo"></div>
+  </section>
+  <section class="carte">
+    <h2>Montant</h2>
+    <div class="bbox-gros" id="tx">–</div>
+    <div class="muted" id="txo"></div>
+  </section>
+  <section class="carte">
+    <h2>Connexion</h2>
+    <div class="bbox-gros" id="etat">–</div>
+    <div class="muted" id="ip"></div>
+  </section>
+  <section class="carte">
+    <h2>Administration</h2>
+    <div class="bbox-liens raccourcis">
+      <a href="https://mabbox.bytel.fr" target="_blank" rel="noopener">Bbox</a>
+      <a href="http://192.168.1.253" target="_blank" rel="noopener">Répéteur TP-Link</a>
+    </div>
+  </section>
+
+  <section class="carte large">
+    <div class="entete">
+      <h2>Débit</h2>
+      <label class="muted">Période
+        <select id="bboxPeriode">
+          <option value="15">15 min</option>
+          <option value="60" selected>1 h</option>
+          <option value="360">6 h</option>
+          <option value="1440">24 h</option>
+          <option value="10080">7 jours</option>
+        </select>
+      </label>
+    </div>
+    <canvas id="bboxGraph" height="110"></canvas>
+  </section>
+
+  <section class="carte large">
+    <div class="entete"><h2>Appareils connectés</h2><span id="hcount" class="muted"></span></div>
+    <div class="bbox-scroll">
+      <table class="bbox-table">
+        <thead><tr><th>Appareil</th><th>IP</th><th>Liaison</th><th>Type</th></tr></thead>
+        <tbody id="hosts"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const mbps = v => (v / 1e6).toFixed(1) + " Mb/s";
+const $ = id => document.getElementById(id);
+
+const chart = new Chart($("bboxGraph"), {
+  type: "line",
+  data: { labels: [], datasets: [
+    { label: "Descendant", data: [], borderColor: "#4fc3f7", pointRadius: 0, tension: .3 },
+    { label: "Montant",    data: [], borderColor: "#ffb74d", pointRadius: 0, tension: .3 }
+  ]},
+  options: { animation: false,
+             scales: { y: { beginAtZero: true, title: { display: true, text: "Mb/s" } } } }
+});
+
+async function live() {
+  try {
+    const d = await (await fetch("/api/bbox/live")).json();
+    if (d.rx !== undefined) { $("rx").textContent = mbps(d.rx); $("tx").textContent = mbps(d.tx); }
+    $("rxo").textContent = d.rx_occ != null ? `${d.rx_occ} % de ${d.rx_contract / 1000} Mb/s` : "";
+    $("txo").textContent = d.tx_occ != null ? `${d.tx_occ} % de ${d.tx_contract / 1000} Mb/s` : "";
+    $("etat").textContent = d.error ? "Erreur" : (d.state || "–");
+    $("ip").textContent = d.error || d.ip || "";
+  } catch (e) {}
+}
+
+async function historique() {
+  try {
+    const m = $("bboxPeriode").value;
+    const d = await (await fetch("/api/bbox/history?minutes=" + m)).json();
+    const long = m >= 1440;
+    chart.data.labels = d.map(p => {
+      const t = new Date(p.ts * 1000);
+      return long
+        ? t.toLocaleString("fr-FR", { day: "2-digit", hour: "2-digit", minute: "2-digit" })
+        : t.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    });
+    chart.data.datasets[0].data = d.map(p => p.rx / 1e6);
+    chart.data.datasets[1].data = d.map(p => p.tx / 1e6);
+    chart.update();
+  } catch (e) {}
+}
+
+async function appareils() {
+  try {
+    const d = await (await fetch("/api/bbox/hosts")).json();
+    $("hcount").textContent = d.error ? "Erreur : " + d.error
+      : `${d.hosts.length} connectés (${d.total} connus)`;
+    const tb = $("hosts"); tb.innerHTML = "";
+    d.hosts.forEach(h => {
+      const tr = document.createElement("tr");
+      const liaison = [h.link, h.band, h.rssi ? h.rssi + " dBm" : ""].filter(Boolean).join(" · ");
+      const type = [h.type, h.maker].filter(Boolean).join(" · ");
+      [h.name, h.ip, liaison, type].forEach(v => {
+        const td = document.createElement("td"); td.textContent = v || ""; tr.appendChild(td);
+      });
+      tb.appendChild(tr);
+    });
+  } catch (e) {}
+}
+
+$("bboxPeriode").onchange = historique;
+live(); historique(); appareils();
+setInterval(live, 3000); setInterval(historique, 15000); setInterval(appareils, 15000);
+</script>
+{% endblock %}

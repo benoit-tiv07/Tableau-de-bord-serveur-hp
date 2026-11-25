@@ -1,0 +1,6 @@
+flask
+psutil
+icalendar
+recurring-ical-events
+feedparser
+requests

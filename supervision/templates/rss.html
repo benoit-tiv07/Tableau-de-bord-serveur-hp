@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block titre %}RSS{% endblock %}
+{% block contenu %}
+  <h1>Veille</h1>
+
+  <section class="carte">
+    <h2>Flux</h2>
+    <form id="formFlux" class="form-devoir">
+      <input name="nom" type="text" placeholder="Nom" maxlength="80" autocomplete="off">
+      <input name="url" type="url" placeholder="Adresse du flux RSS (https://…)" required autocomplete="off" style="flex: 1 1 260px">
+      <input name="categorie" type="text" placeholder="Catégorie (cyber, réseau…)" maxlength="40" autocomplete="off">
+      <button type="submit">Ajouter</button>
+    </form>
+    <p id="messageFlux" class="muted"></p>
+    <ul id="listeFlux" class="devoirs"></ul>
+  </section>
+
+  <section class="carte">
+    <div class="barre-outils">
+      <select id="filtreFlux"></select>
+      <label><input type="checkbox" id="nonLus" checked> Non lus seulement</label>
+      <button type="button" id="btnActualiser">Actualiser</button>
+      <button type="button" id="btnToutLu">Tout marquer comme lu</button>
+    </div>
+    <ul id="articles" class="articles"><li class="muted">Chargement…</li></ul>
+  </section>
+{% endblock %}
+{% block scripts %}
+  <script src="{{ url_for('static', filename='rss.js') }}"></script>
+{% endblock %}

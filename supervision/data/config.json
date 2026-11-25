@@ -1,0 +1,18 @@
+{
+  "calendars": [
+    {
+      "name": "Emploi du temps",
+      "icsUrl": "https://calendar.google.com/calendar/ical/m6l11pbi5i87jet6rh9aq38654r1mp5e%40import.calendar.google.com/public/basic.ics",
+      "embedUrl": "https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Europe%2FParis&mode=WEEK&hl=fr&showPrint=0&showTitle=0&showTz=0&showCalendars=0&src=bTZsMTFwYmk1aTg3amV0NnJoOWFxMzg2NTRyMW1wNWVAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%233f51b5"
+    },
+    {
+      "name": "Devoirs",
+      "icsUrl": "https://calendar.google.com/calendar/ical/dd8slfogqnmc5grh2ujtimgqc1ehldah%40import.calendar.google.com/public/basic.ics",
+      "embedUrl":"https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Europe%2FParis&showTitle=0&mode=AGENDA&showPrint=0&src=ZGQ4c2xmb2dxbm1jNWdyaDJ1anRpbWdxYzFlaGxkYWhAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23b39ddb",
+      "todo": true
+    }
+  ],
+  "shortcuts": [
+    { "label": "GitHub", "target": "https://github.com" }
+  ]
+}
